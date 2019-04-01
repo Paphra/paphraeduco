@@ -1,0 +1,13 @@
+__pycache__
+.env
+.flaskenv
+*.py[cod]
+venv
+dist
+build
+app.db
+logs
+eggs
+
+.coverage
+.tox
