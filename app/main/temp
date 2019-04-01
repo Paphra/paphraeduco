@@ -1,0 +1,22 @@
+{
+    'code': 'EDU1201',
+    'name': 'Human Growth and Development',
+    'lecturer': 'Mr. Anthony Miyingo',
+    'semester': 2,
+    'year': 1,
+    'faculty': 'Education',
+    'number_of_groups': 10,
+    'department': 'Professionals',
+    '_link': url_for('/courses/EDU1201')
+},
+{
+    'code': 'EDU1202',
+    'name': 'Foundation of Education',
+    'lecturer': 'Mr. Anthony Miyingo',
+    'semester': 2,
+    'year': 1,
+    'faculty': 'Education',
+    'number_of_groups': 8,
+    'department': 'Professionals',
+    '_link': url_for('/courses/EDU1202')
+}
