@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, g, url_for
 from flask_bootstrap import Bootstrap
 
 from config import Config
@@ -16,5 +16,8 @@ def create_app(config_class=Config):
 
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
+
+    from app.faculties import bp as faculties_bp
+    app.register_blueprint(faculties_bp)
 
     return app

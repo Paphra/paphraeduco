@@ -1,6 +1,7 @@
 import os
 
-from flask import (render_template, redirect, url_for, send_from_directory)
+from flask import (render_template, redirect, url_for, send_from_directory,
+                   g)
 from app.main import bp
 
 
@@ -16,17 +17,21 @@ def index():
     faculties = [
         {
             'name': 'Education',
-            '_link': '/facaulties/education'
+            'id': 1,
+            '_link': url_for('faculties.faculties', id=1)
         },
         {
             'name': 'Business and ICT',
-            '_link': '/facaulties/bit'
+            'id': 2,
+            '_link': url_for('faculties.faculties', id=2)
         },
         {
             'name': 'Biomedical',
-            '_link': '/facaulties/biomedical'
+            'id': 3,
+            '_link': url_for('faculties.faculties', id=3)
         }
     ]
+
     posts = [
         {
             'author': 'Univeristy',
@@ -34,16 +39,17 @@ def index():
             'timestamp': '2019020320',
             'topic': 'Anouncement 1',
             'short_description': 'Major announcement 1',
-            '_link': '/faculties/education/posts/1'
+            '_link': '/faculties/2/posts/1'
         },
         {
-            'author': 'Univeristy',
+            'author': 'Lecturer',
             'faculty': 'Education',
             'timestamp': '2019020320',
             'topic': 'Anouncement 2',
             'short_description': 'Major announcement 2',
-            '_link': '/faculties/education/posts/1'
+            '_link': '/faculties/3/posts/1'
         }
 
     ]
-    return render_template('index.html', faculties=faculties, posts=posts)
+    return render_template('index.html', posts=posts, faculties=faculties,
+                           a='i', title='Home')
