@@ -1,5 +1,9 @@
 {% extends 'bootstrap/base.html' %}
 
+{% block head %}
+{{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css.css')}}">
+{% endblock %}
 {% block title %}
     {% if title %}{{ title }} - PaphraEduco
     {% else %}Welcome to PaphraEduco
@@ -7,7 +11,7 @@
 {% endblock %}
 
 {% block navbar %}
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed"
@@ -24,18 +28,26 @@
 
             <div class="collapse navbar-collapse" id="navbar-main">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="{{ url_for('main.index') }}">
+                    <li class="{% if a and a=='i' %}active{% endif %}">
+                        <a href="{{ url_for('main.index') }}">
                         {{ 'Home' }}</a></li>
-                    <li class="dropdown">
+                    <li class="dropdown
+                               {% if a and a=='f' %}active{% endif %}">
                         <a href="{{ '/faculties' }}" class="dropdown-toggle"
                            data-toggle="dropdown" role="button"
                            aria-haspopup="true" aria-expanded="false">
                            {{ 'Faculties' }} <span class="caret"></span></a>
 
                         {% if faculties %}
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu"
+                                aria-labelledby="dropdownMenuDivier">
+                                <li class="{% if af and af==0 %}active{% endif %}">
+                                    <a href="{{ '/faculties' }}">
+                                        {{ 'All Faculties' }}</a></li>
+                                <li role="separator" class="divider"></li>
                                 {% for faculty in faculties %}
-                                    <li><a href="{{ faculty._link }}">
+                                    <li class="{% if af and af==faculty.id %}active{% endif %}">
+                                        <a href="{{ faculty._link }}">
                                         {{ faculty.name }}</a></li>
                                 {% endfor %}
                             </ul>
