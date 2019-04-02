@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+    <div class="container-fluid">
+        <div class="page-header">
+            <h2>Posts</h2>
+        </div>
+        <div class="row">
+            {% if posts %}
+                <table class="table table-hover">
+                    {% for post in posts %}
+                        <tr>
+                            <td width="40">
+                                <h3>{{ post.author }}</h3>
+                                <p>{{ post.timestamp }}</p>
+                            </td>
+                            <td>
+                                <h4><a href="{{ post._link }}">
+                                {{ post.topic }}</a></h4>
+                                <p>{{ post.short_description }}</p>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
