@@ -1,5 +1,5 @@
 from flask import Blueprint
 
-bp = Blueprint()
+bp = Blueprint('groups', __name__)
 
-from app.groups import forms, routes
+from app.groups import routes

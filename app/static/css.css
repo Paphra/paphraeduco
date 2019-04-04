@@ -1,3 +1,7 @@
 .m-center-align{
     text-align: center;
 }
+
+.m-inline{
+    display: inline-block;
+}

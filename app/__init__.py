@@ -17,9 +17,6 @@ def create_app(config_class=Config):
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
 
-    from app.faculties import bp as faculties_bp
-    app.register_blueprint(faculties_bp)
-
     from app.groups import bp as groups_bp
     app.register_blueprint(groups_bp)
 
