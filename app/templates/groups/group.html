@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+    <div class="container">
+        <div class="page-header">
+            <h3>{{ group.name }} - {{ group.course }}</h3>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+
+            </div>
+            <div class="col-md-3">
+                {{ wtf.quick_form(form) }}
+                <hr>
+                {% if sample %}{{ sample }}
+                {% include 'groups/_group_posts.html' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
