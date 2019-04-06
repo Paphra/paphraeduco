@@ -11,14 +11,19 @@
                         <th>{{ 'Group' }}</th>
                         <th>{{ 'Course' }}</th>
                         <th>{{ 'Members'}}</th>
+                        <th>{{ 'Admin' }}</th>
                     </thead>
                     <tbody>
                         {% for group in groups %}
                             <tr>
-                                <td><a href="{{ group._link }}">
+                                <td><a href="{{ url_for('groups.get_group',
+                                                         id=group.id) }}">
                                     {{ group.name }}</a></td>
-                                <td>{{ group.course }}</td>
-                                <td>{{ group.members }}</td>
+                                <td>{{ group.course_name }}</td>
+                                <td>{{ group.get_members().count() }}</td>
+                                <td>{% if group.admin == current_user %}
+                                    {{ 'You' }}{% else %}
+                                    {{ group.admin.username }}{% endif %}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
