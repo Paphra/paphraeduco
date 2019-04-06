@@ -1,8 +1,10 @@
 from flask import (render_template, redirect, url_for, current_app)
+from flask_login import (current_user, login_required)
 from app.groups import bp
 from app.groups.forms import GroupPostForm
 
 @bp.route('/groups')
+@login_required
 def groups():
     groups = [
         {

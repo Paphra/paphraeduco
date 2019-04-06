@@ -2,6 +2,7 @@ import os
 
 from flask import (render_template, redirect, url_for, send_from_directory,
                    g, current_app, flash)
+from flask_login import (current_user)
 from app.main import bp
 from app.main.forms import MainSearchForm
 
