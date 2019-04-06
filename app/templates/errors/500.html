@@ -1,13 +1,9 @@
 {% extends 'base.html' %}
 
+{% block heading %}{{ 'An unexpected Error has occured!'}}{% endblock %}
 {% block app_content %}
-    <div class="container-fluid">
-        <div class="m-center-align">
-            <div class="page-header">
-                <h3>{{ 'An unexpected Error has occured!'}}</h3>
-            </div>
-            <p>{{ 'The administrators have been informed, Sorry for the '
-                  'inconveniences' }}</p>
-        </div>
+    <div class="m-center-align">
+        <p>{{ 'The administrators have been informed, Sorry for the '
+              'inconveniences' }}</p>
     </div>
 {% endblock %}
