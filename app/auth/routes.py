@@ -2,7 +2,7 @@ from flask import (redirect, render_template, url_for, g, current_app,
                    request, flash)
 from flask_login import (current_user, login_user)
 from app.auth import bp
-from app.auth.forms import LoginForm
+from app.auth.forms import (LoginForm, RegisterForm)
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -27,3 +27,19 @@ def login():
 
     return render_template('auth/login.html', a='l', title='Login',
                            form=form)
+
+
+@bp.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        fullname = form.fullname.data
+        gender = form.gender.data
+        username = form.username.data
+        email = form.email.data
+        password = form.password.data
+
+        return redirect(url_for('groups.groups'))
+
+    return render_template('auth/register.html', title='Register',
+                           a='r', form=form)

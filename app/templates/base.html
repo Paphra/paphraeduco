@@ -49,6 +49,9 @@
                         <li class="{% if a and a=='l' %}active{% endif %}">
                             <a href="{{ url_for('auth.login') }}">
                                 {{ 'Login' }}</a></li>
+                        <li class="{% if a and a=='r' %}active{% endif %}">
+                            <a href="{{ url_for('auth.register' )}}">
+                                {{ 'Register' }}</a></li>
                     {% else %}
                     {% endif %}
                 </ul>
