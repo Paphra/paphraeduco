@@ -8,6 +8,7 @@ from flask_login import (current_user)
 from app import db
 from app.main import bp
 from app.main.forms import MainSearchForm
+from app.models import Post, Group
 
 
 @bp.before_request
@@ -26,39 +27,15 @@ def favicon():
 @bp.route('/index')
 @bp.route('/')
 def index():
+    if current_user.is_authenticated:
+        flash('Hi, {}!'.format(current_user.username))
 
     search_form = MainSearchForm()
-    posts = [
-        {
-            'author': 'Paphra',
-            'group': {
-                'name': 'Group 1',
-                'id': 1,
-                'course': 'IDSK1201'
-            },
-            'timestamp': '2019020320',
-            'topic': 'Anouncement 1',
-            'body': 'Major announcement 1',
-            'attachment': 'attachment 1',
-            'attachment_link': '/attachments/1',
-            '_link': '/posts/1'
-        },
-        {
-            'author': 'James',
-            'group': {
-                'name': 'Group 4',
-                'id': 3,
-                'course': 'IDSK1201'
-            },
-            'timestamp': '2019020320',
-            'topic': 'Anouncement 2',
-            'body': 'Major announcement 2',
-            'attachment': 'attachment 1',
-            'attachment_link': '/attachments/1',
-            '_link': '/posts/2'
-        }
 
-    ]
-    flash('Welcome to pEduco!')
+    posts = Post.query.filter_by(published=1).order_by(
+        Post.timestamp.desc()).all()
+    if not posts:
+        flash('No Published posts')
+
     return render_template('index.html', posts=posts, a='i', title='Home',
                            search_form=search_form)

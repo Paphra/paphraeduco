@@ -35,7 +35,7 @@ class RegisterForm(FlaskForm):
         user = None
         users = User.query.all()
         for u in users:
-            if u.username.lower() == username.lower():
+            if u.username.lower() == username.data.lower():
                 user = u
 
         if user is not None:
@@ -45,7 +45,7 @@ class RegisterForm(FlaskForm):
         user = None
         users = User.query.all()
         for u in users:
-            if u.email.lower() == email.lower():
+            if u.email.lower() == email.data.lower():
                 user = u
 
         if user is not None:

@@ -1,0 +1,20 @@
+
+<h4>
+    <a href="{{ url_for('posts.group_post',
+       group_id=post.group.id, post_id=post.id) }}">
+    {{ post.topic }}</a>
+    {% if post.group.is_admin(current_user) %}
+        <a href="{{ url_for('posts.publish_post',
+            group_id=post.group.id, post_id=post.id) }}"
+           class="btn btn-default">
+           {% if post.published %}{{ 'Unpublish' }}
+           {% else %}{{ 'Publish' }}{% endif %}</a>
+    {% endif %}
+</h4>
+<p>{{ post.body }}</p>
+{% if post.attachment %}
+<p>{{ 'Attachment: ' }}<a href="{{ url_for('posts.get_attachment',
+       group_id=post.group.id, post_id=post.id) }}"
+       target="_blank">
+    {{ post.attachment }}</a></p>
+{% endif %}
