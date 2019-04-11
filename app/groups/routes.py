@@ -35,10 +35,39 @@ def groups():
 @bp.route('/groups/<int:id>', methods=['GET', 'POST'])
 @login_required
 def get_group(id):
+    group = Group.query.get_or_404(id)
+    if not group.is_member(current_user):
+        flash('You are not a member of {}'.format(group.name))
+        return redirect(url_for('groups.groups'))
+    if not group.posts.count():
+        flash('There are no Posts in this Group')
+
     search_form = MainSearchForm()
     form = GroupPostForm()
 
-    if form.validate_on_submit():
+    search_results = []
+    if search_form.validate_on_submit():
+        txt = search_form.search.data.lower()
+        posts = Post.query.filter_by(group=group).order_by(
+            Post.timestamp.desc())
+
+        def return_back():
+            return redirect(url_for('main.index'))
+
+        if not posts:
+            flash('Sorry, there are no Posts in this Group!')
+            return return_back()
+
+        for post in posts:
+            if txt in (post.topic + post.body + post.author.username + \
+                       post.author.fullname + post.group.name + \
+                       post.group.course_name + post.group.course_code
+                       ).lower():
+                search_results.append(post)
+
+        flash('{} result(s) found!'.format(len(search_results)))
+
+    elif form.validate_on_submit():
         topic = form.topic.data
         body = form.body.data
         attachment = form.attachment.data
@@ -57,13 +86,6 @@ def get_group(id):
         flash('Your post is now live!')
         return redirect(url_for('groups.get_group', id=id))
 
-    group = Group.query.get_or_404(id)
-    if not group.is_member(current_user):
-        flash('You are not a member of {}'.format(group.name))
-        return redirect(url_for('groups.groups'))
-    if not group.posts.count():
-        flash('There are no Posts in this Group')
-
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['POSTS_PER_PAGE']
     posts = group.posts.order_by(
@@ -79,7 +101,8 @@ def get_group(id):
 
     return render_template('groups/group.html', a='g', group=group,
                            title=title, posts=posts.items, form=form,
-                           prev=prev, next=next, search_form=search_form)
+                           prev=prev, next=next, search_form=search_form,
+                           search_results=search_results)
 
 @bp.route('/groups/create', methods=['GET', 'POST'])
 @login_required
