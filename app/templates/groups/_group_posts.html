@@ -1,4 +1,4 @@
-{% if posts.count() %}
+{% if posts %}
     <table class="table table-hover">
         {% for post in posts %}
             {% set user_link %}
@@ -19,6 +19,7 @@
             </tr>
         {% endfor %}
     </table>
+    {% include '_pagination.html' %}
 {% else %}
     <div class="alert alert-danger m-center-align">
         <h4>{{ 'No Posts' }}</h4>

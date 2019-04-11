@@ -1,10 +1,10 @@
 from flask_wtf import FlaskForm
 from flask_uploads import UploadSet, DOCUMENTS
 from flask_wtf.file import FileField, FileRequired, FileAllowed
-from wtforms import StringField, SubmitField, TextAreaField
-from wtforms.validators import DataRequired, ValidationError
+from wtforms import (StringField, SubmitField, TextAreaField, SelectField)
+from wtforms.validators import (DataRequired, ValidationError, Email, Length)
 
-from app.models import Group, Post
+from app.models import Group, Post, User
 
 
 class GroupPostForm(FlaskForm):
@@ -42,3 +42,22 @@ class CreateGroupForm(FlaskForm):
             raise ValidationError('Group already Exists!')
         if 'group' not in n.lower():
             raise ValidationError("Group name must contain the word 'Group'")
+
+
+class GroupAddNewMemberForm(FlaskForm):
+    fullname = StringField('Full Name', validators=[DataRequired()])
+    gender = SelectField('Gender', validators=[DataRequired()],
+      choices=[('Male', 'Male'), ('Female', 'Female'),
+               ('Others', 'Others')])
+    email = StringField('Email Address', validators=[DataRequired(),
+                                                     Email()])
+    password = StringField('Set Password', validators=[DataRequired(),
+                                                       Length(min=8)])
+    add = SubmitField('Add User')
+
+    def validate_email(self, email):
+        user1 = User.query.filter_by(email=email.data).first()
+        if user1 is not None:
+            raise ValidationError('A User with that Email Address Already '
+                                  'Exists. Search for this User in the '
+                                  'search box on the navigation bar!')

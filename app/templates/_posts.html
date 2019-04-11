@@ -32,6 +32,7 @@
             </tr>
         {% endfor %}
     </table>
+    {% include '_pagination.html' %}
 {% else %}
     <div class="alert alert-danger m-center-align">
         <h4>{{ 'No Posts' }}</h4>

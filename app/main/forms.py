@@ -6,4 +6,4 @@ from wtforms.validators import DataRequired
 class MainSearchForm(FlaskForm):
     search = StringField('', validators=[DataRequired()],
                          render_kw={'placeholder': 'Search ...'})
-    submit = SubmitField('Search')
+    search_btn = SubmitField('Search')

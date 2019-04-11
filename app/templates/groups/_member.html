@@ -1,0 +1,12 @@
+{% set member_link %}
+    <a href="{{ '/users/{}'.format(member.id) }}">
+        {% if member == current_user %}{{ 'You' }}
+        {% else %}
+        {{ member.username }}{% endif %}</a>
+{% endset %}
+<td>{{ member_link }}
+    {% if group.is_admin(member) %}{{ '[Admin]' }}
+    {% endif %}
+</td>
+<td>{{ member.fullname }}</td>
+<td>{{ member.email }}</td>

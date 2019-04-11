@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block heading %}{{ group.name }} - {{ group.course_name }} <br>
+    {{ 'Group Members' }}{% endblock %}
+{% block app_content %}
+    {% if search_results and group.is_admin(current_user) %}
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6 m-center-align">
+                <h4>{{ 'Search Results'}}</h4>
+                <table class="table table-hover">
+                    <thead>
+                        <th>{{ 'Username' }}</th>
+                        <th>{{ 'Full Name' }}</th>
+                        <th>{{ 'Email address' }}</th>
+                        <th>{{ 'Status' }}</th>
+                    </thead>
+                    <tbody>
+                        {% for member in search_results %}
+                        <tr>
+                            {% include 'groups/_member.html' %}
+                            <td>{% if not group.is_admin(member) and not group.is_member(member) %}
+                                <a href="{{ url_for('groups.add_member',
+                                   group_id=group.id, user_id=member.id) }}"
+                                   class="btn btn-danger small">
+                                    {{ 'Add' }}</a>{% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+    {% endif %}
+    <div class="row">
+        {% if not add_form %}
+            <div class="col-md-2"></div>
+        {% endif %}
+        <div class="col-md-8">
+            <table class="table table-hover">
+                <thead>
+                    <th>{{ 'Username' }}</th>
+                    <th>{{ 'Full Name' }}</th>
+                    <th>{{ 'Email address' }}</th>
+                    {% if group.is_admin(current_user) %}
+                        <th>{{ 'Action' }}</th>
+                    {% endif %}
+                </thead>
+                <tbody>
+                    {% if members %}
+                    {% for member in members %}
+                    <tr>
+                        {% include 'groups/_member.html' %}
+                        {%  if group.is_admin(current_user) %}
+                            <td>{% if not group.is_admin(member) %}
+                                <a href="{{ url_for('groups.remove_member',
+                                   group_id=group.id, member_id=member.id) }}"
+                                   class="btn btn-danger small">
+                                    {{ 'Remove' }}</a>{% endif %}
+                            </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <div class="alert alert-danger">
+                        <h4>{{ 'No Members' }}</h4>
+                    </div>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        {% if add_form %}
+        <div class="col-md-4">
+            <div class="m-center-align">
+                <h3>{{ 'Add new User' }}</h3>
+                {{ wtf.quick_form(add_form) }}
+            </div>
+        </div>
+        {% else %}
+            <div class="col-md-2"></div>
+        {% endif %}
+    </div>
+    <hr>
+{% endblock %}

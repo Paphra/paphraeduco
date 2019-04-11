@@ -2,7 +2,7 @@ import os
 
 from datetime import datetime
 from flask import (render_template, redirect, url_for, send_from_directory,
-                   g, current_app, flash)
+                   g, current_app, flash, request)
 from flask_login import (current_user)
 
 from app import db
@@ -27,15 +27,18 @@ def favicon():
 @bp.route('/index')
 @bp.route('/')
 def index():
-    if current_user.is_authenticated:
-        flash('Hi, {}!'.format(current_user.username))
-
     search_form = MainSearchForm()
-
+    page = request.args.get('page', 1, type=int)
+    per_page = current_app.config['POSTS_PER_PAGE']
     posts = Post.query.filter_by(published=1).order_by(
-        Post.timestamp.desc()).all()
+        Post.timestamp.desc()).paginate(page, per_page, False)
+
+    prev = url_for(
+        'main.index', page=posts.prev_num) if posts.has_prev else None
+    next = url_for(
+        'main.index', page=posts.next_num) if posts.has_next else None
     if not posts:
         flash('No Published posts')
 
-    return render_template('index.html', posts=posts, a='i', title='Home',
-                           search_form=search_form)
+    return render_template('index.html', posts=posts.items, a='i', title='Home',
+                           search_form=search_form, next=next, prev=prev)
