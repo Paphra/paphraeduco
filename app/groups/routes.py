@@ -4,6 +4,7 @@ from flask import (render_template, redirect, url_for, current_app,
                    flash, request)
 from flask_login import (current_user, login_required)
 from werkzeug.utils import secure_filename
+from flask_babel import _
 
 from app.groups import bp
 from app.groups.forms import (GroupPostForm, CreateGroupForm,
@@ -113,7 +114,7 @@ def create_group():
               'create!')
         return redirect(url_for('groups.groups'))
 
-    create_group_form = CreateGroupForm()
+    form = CreateGroupForm()
     if form.validate_on_submit():
         name = form.name.data
         code = form.course_code.data
@@ -128,7 +129,7 @@ def create_group():
         return redirect(url_for('groups.groups'))
 
     return render_template('groups/create.html', title='Create Group',
-                           a='g', form=create_group_form)
+                           a='g', form=form)
 
 @bp.route('/groups/<int:id>/members', methods=['GET', 'POST'])
 @login_required

@@ -39,7 +39,7 @@ def login():
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('groups.groups'))
-        
+
     form = RegisterForm()
     if form.validate_on_submit():
         fullname = form.fullname.data
@@ -65,3 +65,8 @@ def logout():
     if current_user.is_authenticated:
         logout_user()
     return redirect(url_for('auth.login'))
+
+
+@bp.route('/reset_password')
+def reset_password():
+    pass

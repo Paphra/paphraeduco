@@ -10,18 +10,6 @@ from app.models import Group, Post
 import config
 
 
-@bp.route('/groups/<int:group_id>/posts')
-@login_required
-def group_posts(group_id):
-    pass
-
-
-@bp.route('/groups/<int:group_id>/posts/<int:post_id>')
-@login_required
-def group_post(group_id, post_id):
-    pass
-
-
 @bp.route('/groups/<int:group_id>/posts/<int:post_id>/publish')
 @login_required
 def publish_post(group_id, post_id):

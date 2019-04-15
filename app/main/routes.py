@@ -4,18 +4,20 @@ from datetime import datetime
 from flask import (render_template, redirect, url_for, send_from_directory,
                    g, current_app, flash, request)
 from flask_login import (current_user)
+from flask_babel import _, get_locale
 
 from app import db
 from app.main import bp
 from app.main.forms import MainSearchForm
 from app.models import Post, Group
 
-
 @bp.before_request
 def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
+
+    g.locale = str(get_locale())
 
 
 @bp.route('/favicon.ico')

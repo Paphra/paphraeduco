@@ -48,8 +48,13 @@
                             <a href="{{ url_for('groups.groups') }}">
                                 {{ 'Groups' }}</a></li>
                         <li class="{% if a and a=='p' %}active{% endif %}">
-                            <a href="{{ '/profile' }}">
-                                {{ current_user.username }}</a></li>
+                            <a href="{{ url_for('users.profile') }}">
+                                {{ 'Profile' }}
+                                {% if name %}
+                                [{% if name == current_user.username %}You
+                                {% else %}{{ name }}{% endif %}]
+                                {% endif %}
+                            </a></li>
                         <li><a href="{{ url_for('auth.logout') }}">
                             {{ 'Logout' }}</a></li>
                     {% else %}
@@ -82,4 +87,10 @@
         </div>
         {% block app_content %}{% endblock %}
     </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {{ moment.include_moment() }}
+
 {% endblock %}

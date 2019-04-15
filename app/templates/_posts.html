@@ -3,7 +3,7 @@
         {% for post in posts %}
             <tr>
                 {% set user_link %}
-                    <a href="{{ '/users/{}'.format(post.author.id) }}">
+                    <a href="{{ url_for('users.get_user', id=post.author.id) }}">
                         {% if current_user == post.author %}
                             {{ 'You' }}{% else %}
                             {{ post.author.username }}{% endif %}
@@ -21,13 +21,13 @@
                         {{ post.group.course_code }}
                     {% endif %}
                 {% endset %}
-                <td width="40">
+                <td width="50">
                     <h4>{{ user_link }}</h4>
                     <h4>{{ group_link }}</h4>
+                    <p>{{ moment(post.timestamp).fromNow() }}</p>
                 </td>
                 <td>
                     {% include '_post.html' %}
-                    {{ post.timestamp }}
                 </td>
             </tr>
         {% endfor %}

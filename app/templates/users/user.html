@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block heading %}
+    {{ user.fullname }}
+{% endblock %}
+
+{% block app_content %}
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-3">
+            <h4 class="m-center-align">{{ 'Information' }}</h4>
+            <table class="table table-hover">
+                <tr>
+                    <th>Username: </th>
+                    <td>{{ user.username }}</td>
+                </tr>
+                <tr>
+                    <th>Full Name: </th>
+                    <td>{{ user.fullname }}</td>
+                </tr>
+                <tr>
+                    <th>Sex: </th>
+                    <td>{{ user.gender }}</td>
+                </tr>
+                <tr>
+                    <th>{% if user.gender == 'Male' %}
+                        About Him: {% else %}About Her: {% endif %}
+                    </th>
+                    <td>{{ user.aboutme }}</td>
+                </tr>
+            </table>
+            <hr>
+            <div class="m-center-align">
+                <a href="#" class="btn btn-default">
+                    Send Message</a>
+            </div>
+            <hr>
+        </div>
+        <div class="col-md-5">
+            <h4 class="m-center-align">
+                <a href="{{ url_for('groups.groups') }}">
+                    {{ 'Groups' }}</a>
+            </h4>
+            {% if groups %}
+            <table class="table table-hover">
+                <thead>
+                    <th>Group Name</th>
+                    <th>Course</th>
+                    <th>Members</th>
+                    <th>Admin</th>
+                </thead>
+                <tbody>
+                    {% for group in groups %}
+                        <tr>
+                            <td><a href="{{ url_for('groups.get_group',
+                                                     id=group.id) }}">
+                                {{ group.name }}</a></td>
+                            <td>{{ group.course_code + ': ' +
+                                group.course_name }}</td>
+                            <td>{{ group.get_members().count() }}</td>
+                            {% set admin_link %}
+                                <a href="{{ url_for('users.get_user',
+                                   id=group.admin.id) }}">
+                                    {% if current_user == group.admin %}
+                                        {{ 'You' }}{% else %}
+                                        {{ group.admin.username }}
+                                        {% endif %}
+                                </a>
+                            {% endset %}
+                            <td>{{ admin_link }}</td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+            {% else %}
+                <div class="alert alert-danger m-center-align">
+                    Does not Belong to Any Group
+                </div>
+            {% endif %}
+            <hr>
+            <h4 class="m-center-align">{{ 'Published Posts' }}</h4>
+            {% include '_posts.html' %}
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+{% endblock %}
