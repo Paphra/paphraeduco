@@ -1,0 +1,16 @@
+<nav aria-label="...">
+    <ul class="pager">
+        {% if prev %}
+            <li class="previous">
+                <a href="{{ prev or '#' }}">
+                   <span aria-hidden='true'>&larr;</span>{{ 'Previous' }}</a>
+            </li>
+        {% endif %}
+        {% if next %}
+            <li class="next">
+                <a href="{{ next or '#' }}">
+                    {{ 'Next' }}<span aria-hidden="true">&rarr;</span></a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>

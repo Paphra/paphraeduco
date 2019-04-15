@@ -13,3 +13,5 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL',
                                              default='sqlite:///' + \
                                              os.path.join(basedir, 'app.db'))
+    POSTS_PER_PAGE = 20
+    GROUPS_PER_PAGE = 10

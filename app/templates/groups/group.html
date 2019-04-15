@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
 {% import 'bootstrap/wtf.html' as wtf %}
 
-{% block heading %}{{ group.name }} - {{ group.course_name }}{% endblock %}
+{% block heading %}{{ group.name }} - {{ group.course_name }}<br>
+<a href="{{ url_for('groups.get_members', id=group.id) }}"
+   class="btn btn-default">
+    {{ 'View Members' }}</a>
+{% endblock %}
 {% block app_content %}
     <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-6">
+        <div class="col-md-1"></div>
+        <div class="col-md-7">
             <h3 class="m-center-align">{{ 'Posts' }}</h3>
             {% include 'groups/_group_posts.html' %}
         </div>
