@@ -2,16 +2,16 @@
     <table class="table table-hover">
         {% for post in posts %}
             {% set user_link %}
-                <a href="{{ '/users/{}'.format(post.author.id) }}">
+                <a href="{{ url_for('users.get_user', id=post.author.id) }}">
                     {% if current_user == post.author %}
                         {{ 'You' }}{% else %}
                         {{ post.author.username }}{% endif %}
                 </a>
             {% endset %}
             <tr>
-                <td width="40">
+                <td width="50">
                     <h3>{{ user_link }}</h3>
-                    <p>{{ post.timestamp }}</p>
+                    <p>{{ moment(post.timestamp).fromNow() }}</p>
                 </td>
                 <td>
                     {% include '_post.html' %}

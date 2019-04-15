@@ -21,9 +21,16 @@
                                     {{ group.name }}</a></td>
                                 <td>{{ group.course_name }}</td>
                                 <td>{{ group.get_members().count() }}</td>
-                                <td>{% if group.admin == current_user %}
-                                    {{ 'You' }}{% else %}
-                                    {{ group.admin.username }}{% endif %}</td>
+                                {% set admin_link %}
+                                    <a href="{{ url_for('users.get_user',
+                                       id=group.admin.id) }}">
+                                        {% if current_user == group.admin %}
+                                            {{ 'You' }}{% else %}
+                                            {{ group.admin.username }}
+                                            {% endif %}
+                                    </a>
+                                {% endset %}
+                                <td>{{ admin_link }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>

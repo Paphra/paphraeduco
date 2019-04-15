@@ -1,8 +1,6 @@
 
 <h4>
-    <a href="{{ url_for('posts.group_post',
-       group_id=post.group.id, post_id=post.id) }}">
-    {{ post.topic }}</a>
+    {{ post.topic }}
     {% if post.group.is_admin(current_user) %}
         <a href="{{ url_for('posts.publish_post',
             group_id=post.group.id, post_id=post.id) }}"

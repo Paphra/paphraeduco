@@ -1,5 +1,5 @@
 {% set member_link %}
-    <a href="{{ '/users/{}'.format(member.id) }}">
+    <a href="{{ url_for('users.get_user', id=member.id) }}">
         {% if member == current_user %}{{ 'You' }}
         {% else %}
         {{ member.username }}{% endif %}</a>
