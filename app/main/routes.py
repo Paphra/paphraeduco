@@ -24,10 +24,31 @@ def favicon():
         os.path.join(current_app.root_path, 'static'),
         'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
-@bp.route('/index')
-@bp.route('/')
+@bp.route('/index', methods=['GET', 'POST'])
+@bp.route('/', methods=['GET', 'POST'])
 def index():
     search_form = MainSearchForm()
+    search_results = []
+    if search_form.validate_on_submit():
+        txt = search_form.search.data.lower()
+        posts = Post.query.filter_by(published=1).order_by(
+            Post.timestamp.desc())
+
+        def return_back():
+            return redirect(url_for('main.index'))
+
+        if not posts:
+            flash('Sorry, there are no Published Posts!')
+            return return_back()
+        for post in posts:
+            if txt in (post.topic + post.body + post.author.username + \
+                       post.author.fullname + post.group.name + \
+                       post.group.course_name + post.group.course_code
+                       ).lower():
+                search_results.append(post)
+
+        flash('{} result(s) found!'.format(len(search_results)))
+
     page = request.args.get('page', 1, type=int)
     per_page = current_app.config['POSTS_PER_PAGE']
     posts = Post.query.filter_by(published=1).order_by(
@@ -40,5 +61,7 @@ def index():
     if not posts:
         flash('No Published posts')
 
-    return render_template('index.html', posts=posts.items, a='i', title='Home',
-                           search_form=search_form, next=next, prev=prev)
+    return render_template('index.html', posts=posts.items, a='i',
+                           title='Home', search_form=search_form,
+                           next=next, prev=prev,
+                           search_results=search_results)
