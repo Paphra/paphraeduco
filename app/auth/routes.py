@@ -9,8 +9,10 @@ from app import db
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
+    if current_user.is_authenticated:
+        return redirect(url_for('groups.groups'))
 
+    form = LoginForm()
     if form.validate_on_submit():
         username = form.username.data
         username = username.lower()
@@ -35,6 +37,9 @@ def login():
 
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('groups.groups'))
+        
     form = RegisterForm()
     if form.validate_on_submit():
         fullname = form.fullname.data

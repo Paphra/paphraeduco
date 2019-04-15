@@ -2,20 +2,38 @@
     <table class="table table-hover">
         {% for post in posts %}
             <tr>
+                {% set user_link %}
+                    <a href="{{ '/users/{}'.format(post.author.id) }}">
+                        {% if current_user == post.author %}
+                            {{ 'You' }}{% else %}
+                            {{ post.author.username }}{% endif %}
+                    </a>
+                {% endset %}
+                {% set group_link %}
+                    {% if post.group.is_member(current_user) %}
+                    <a href="{{ url_for('groups.get_group',
+                                    id=post.group.id) }}">
+                        {{ post.group.name }}<br>
+                        {{ post.group.course_code }}
+                    </a>
+                    {% else %}
+                        {{ post.group.name }}<br>
+                        {{ post.group.course_code }}
+                    {% endif %}
+                {% endset %}
                 <td width="40">
-                    <h3>{{ post.author }}</h3>
-                    <h4>{{ post.group.name }}</h4>
-                    <p>{{ post.timestamp }}</p>
+                    <h4>{{ user_link }}</h4>
+                    <h4>{{ group_link }}</h4>
                 </td>
                 <td>
-                    <h4><a href="{{ post._link }}">
-                    {{ post.topic }}</a></h4>
-                    <p>{{ post.body }}</p>
-
-                    <p><a href="{{ post.attachment_link }}">
-                        {{ post.attachment }}</a></p>
+                    {% include '_post.html' %}
+                    {{ post.timestamp }}
                 </td>
             </tr>
         {% endfor %}
     </table>
+{% else %}
+    <div class="alert alert-danger m-center-align">
+        <h4>{{ 'No Posts' }}</h4>
+    </div>
 {% endif %}

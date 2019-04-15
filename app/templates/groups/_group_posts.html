@@ -1,20 +1,26 @@
-{% if group.posts %}
+{% if posts.count() %}
     <table class="table table-hover">
-        {% for post in group.posts %}
+        {% for post in posts %}
+            {% set user_link %}
+                <a href="{{ '/users/{}'.format(post.author.id) }}">
+                    {% if current_user == post.author %}
+                        {{ 'You' }}{% else %}
+                        {{ post.author.username }}{% endif %}
+                </a>
+            {% endset %}
             <tr>
                 <td width="40">
-                    <h3>{{ post.author }}</h3>
+                    <h3>{{ user_link }}</h3>
                     <p>{{ post.timestamp }}</p>
                 </td>
                 <td>
-                    <h4><a href="{{ post._link }}">
-                    {{ post.topic }}</a></h4>
-                    <p>{{ post.body }}</p>
-
-                    <p><a href="{{ post.attachment_link }}">
-                        {{ post.attachment }}</a></p>
+                    {% include '_post.html' %}
                 </td>
             </tr>
         {% endfor %}
     </table>
+{% else %}
+    <div class="alert alert-danger m-center-align">
+        <h4>{{ 'No Posts' }}</h4>
+    </div>
 {% endif %}

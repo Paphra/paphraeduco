@@ -28,9 +28,12 @@ class User(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     register_on = db.Column(db.DateTime, default=datetime.utcnow)
 
-    groups_created = db.relationship('Group', backref='admin',
-                                     lazy='dynamic',
-                                     foreign_keys='Group.created_by')
+    groups_created = db.relationship(
+        'Group', backref='admin',lazy='dynamic',
+        foreign_keys='Group.created_by')
+    posts = db.relationship(
+        'Post', backref='author', lazy='dynamic',
+        foreign_keys='Post.posted_by')
     groups = db.relationship(
         'Group', secondary=members,
         primaryjoin=(members.c.member_id == id),
@@ -65,12 +68,19 @@ class Group(db.Model):
         backref=db.backref('members', lazy='dynamic'),
         lazy='dynamic')
 
+    posts = db.relationship(
+        'Post', backref='group', foreign_keys='Post.to_group', lazy='dynamic')
+
     def __repr__(self):
         return '<Group {}>'.format(self.name)
 
     def is_member(self, user):
-        return self.members.filter(
-            members.c.member_id == user.id).count() > 0
+        combination = self.members.union(
+            User.query.filter_by(id=self.created_by)).all()
+        return user in combination
+
+    def is_admin(self, user):
+        return self.created_by == user.id
 
     def add(self, user):
         if not self.is_member(user):
@@ -84,3 +94,25 @@ class Group(db.Model):
         combination = self.members.union(
             User.query.filter_by(id=self.created_by))
         return combination
+
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    topic = db.Column(db.String(100), index=True)
+    body = db.Column(db.String(1000), index=True)
+    attachment = db.Column(db.String(50))
+    posted_by = db.Column(db.Integer, db.ForeignKey('user.id'))
+    to_group = db.Column(db.Integer, db.ForeignKey('group.id'))
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    published = db.Column(db.Integer, default=0)
+
+    def __repr__(self):
+        return '<Post {}>'.format(self.topic)
+
+    def publish(self):
+        self.published = 1
+
+    def is_published(self):
+        return self.published > 0
+
+    def unpublish(self):
+        self.published = 0
